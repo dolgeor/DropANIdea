@@ -7,38 +7,38 @@ import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class UsersService {
+export class IdeasService {
 
   private url: string = "http://localhost:8080/ideas";
 
   constructor(private http: Http) { }
 
-  getUsers(){
+  getIdeas(){
     return this.http.get(this.url)
       .map(res => res.json());
   }
 
-  getUser(id){
-    return this.http.get(this.getUserUrl(id))
+  getIdea(id){
+    return this.http.get(this.getIdeaUrl(id))
       .map(res => res.json());
   }
 
-  addUser(user){
-    return this.http.post(this.url, JSON.stringify(user))
+  addIdea(idea){
+    return this.http.post(this.url, JSON.stringify(idea))
       .map(res => res.json());
   }
 
-  updateUser(user){
-    return this.http.put(this.getUserUrl(user.id), JSON.stringify(user))
+  updateIdea(idea){
+    return this.http.put(this.getIdeaUrl(idea.id), JSON.stringify(idea))
       .map(res => res.json());
   }
 
-  deleteUser(id){
-    return this.http.delete(this.getUserUrl(id))
+  deleteIdea(id){
+    return this.http.delete(this.getIdeaUrl(id))
       .map(res => res.json());
   }
 
-  private getUserUrl(id){
+  private getIdeaUrl(id){
     return this.url + "/" + id;
   }
 }
