@@ -34,19 +34,32 @@
       <p><a href="#">Link</a></p>
     </div>
     <div class="col-sm-8 text-left"> 
-     <div class="well well-lg" *ngFor="let idea of ideas">
+     <div class="well well-lg" *ngFor="let idea of users">
         <div class="panel-group">
             <div class=" panel panel-default ">
                 <div class="panel-body">{{idea.text}}</div>
                 <div class="panel-footer text-right">
                     <div>posted by: {{idea.author}}</div>
                     <div>{{idea.date}}</div>
-                 
+                   
                 </div>
               </div>  
         </div>
-
-
+        <!-- <div class="well well-lg" *ngFor="let user of users">
+            <div class="panel-group">
+                <div class=" panel panel-default ">
+                    <div class="panel-body">
+                      <div> ID: {{user.id}}</div>
+                      <div> Login: {{user.login}}</div>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <div> Password: {{user.password}}</div>
+                     
+                    </div>
+                  </div>  
+            </div> -->
+        
+        
         
     </div>
     </div>

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {UsersService} from "./users.service";
+import {User} from "./user";
 
 
 type MyIdea = {
@@ -29,7 +31,19 @@ const ideas: MyIdea[] = [
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'Drop an Idea';
-  ideas = ideas;
-}
+export class AppComponent   implements OnInit {
+    title = 'Drop an Idea';
+      private users: User[] = [];
+    
+      constructor(private usersService: UsersService) { }
+    
+      ngOnInit() {
+        this.usersService.getUsers()
+          .subscribe(data => this.users = data);
+      }
+    
+    
+       
+      
+    
+    }
