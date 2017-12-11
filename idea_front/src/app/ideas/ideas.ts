@@ -1,12 +1,11 @@
 export class Idea {
-    
-    id: number
+
     text: string
     author: string
     date: string
    
-    constructor(  id: number, text: string, author: string,  date: string) {
-        this.id = id;
+    constructor(   text: string, author: string,  date: string) {
+ 
         this.text = text;
         this.author = author;
         this.date = date;
@@ -23,7 +22,7 @@ export class Idea {
     }
 
     static parseIdea(a:any): Idea {
-        return new Idea( a.id, a.text, a.author, a.date);
+        return new Idea(a.text, a.author, a.date);
     }
        
    }

@@ -1,4 +1,23 @@
 <div class="row">
+    <h1>Drop an Idea</h1>
+    <form>
+      <div class="form-group">
+        <label for="name">Text</label>
+        <input #ideaText type="text" class="form-control" id="name" required>
+      </div>
+ 
+      <div class="form-group">
+        <label for="alterEgo">Author</label>
+        <input #ideaAuth type="text" class="form-control" id="alterEgo">
+      </div>
+ 
+      <button (click)="onClickedAdd(ideaAuth.value, ideaText.value)" type="button" class="btn btn-success">Add</button>
+ 
+    </form>
+</div>
+<br><br><br>
+
+<div class="row">
     <div class="col-sm-4">
         Enter Idea ID:    
     </div>
@@ -11,6 +30,7 @@
         <button (click)="onClickGetById(idVal.value)" type="button" class="btn btn-primary">Find</button>  
     </div>
 </div>
+
 <div class="row">
 <div class="well well-lg" *ngFor="let idea of ideas">
 <div class="panel-group">
