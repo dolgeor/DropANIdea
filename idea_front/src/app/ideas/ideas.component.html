@@ -1,12 +1,28 @@
-<div class="well well-lg" *ngFor="let idea of ideas">
-    <div class="panel-group">
-        <div class=" panel panel-default ">
-            <div class="panel-body">{{idea.text}}</div>
-            <div class="panel-footer text-right">
-                <div>posted by: {{idea.author}}</div>
-                <div>{{idea.date}}</div>
-             
-            </div>
-          </div>  
+<div class="row">
+    <div class="col-sm-4">
+        Enter Idea ID:    
     </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <input #idVal  (keyup.enter)="onClickGetById(idVal.value)" class="form-control">
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <button (click)="onClickGetById(idVal.value)" type="button" class="btn btn-primary">Find</button>  
+    </div>
+</div>
+<div class="row">
+<div class="well well-lg" *ngFor="let idea of ideas">
+<div class="panel-group">
+    <div class=" panel panel-default ">
+        <div class="panel-body">{{idea.text}}</div>
+        <div class="panel-footer text-right">
+            <div>posted by: {{idea.author}}</div>
+            <div>{{idea.date}}</div>
+            <div>ID: {{idea.id}}</div>
+         
+        </div>
+      </div>  
+</div>
+</div>
 </div>
