@@ -23,7 +23,13 @@ export class IdeasComponent   implements OnInit {
       //     this.getAllIdeas();
       //   }
       //   else{
-      //     this.getIdeaById(parseInt(val));
+      //     //this.getIdeaById(parseInt(val));
+      //     this.ideasService.deleteIdea(parseInt(val)).subscribe(
+      //         data => {
+      //         console.log('Данные успешно удалены'),
+      //         this.getAllIdeas()
+      //        });
+         
       //   }
       // }
       
@@ -45,6 +51,18 @@ export class IdeasComponent   implements OnInit {
         this.getAllIdeas()
        });
       }
+
+      // onClickedAdd(author, text){
+      //   let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
+      // //  console.log(newIdea)
+      //  this.ideasService.updateIdea(31,newIdea).subscribe(data => {
+      //   console.log('Данные успешно добавлены'),
+      //   this.getAllIdeas()
+      //  });
+      // }
+
+
+
       getAllIdeas(){
         this.ideasService.getIdeas()
         .subscribe(data => this.ideas=data);

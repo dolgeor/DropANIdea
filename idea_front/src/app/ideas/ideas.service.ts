@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http,Response  } from '@angular/http';
 
+import { HttpParams} from '@angular/common/http';
 
 
 import 'rxjs/add/operator/map';
@@ -40,14 +41,16 @@ export class IdeasService {
     .map(res => Idea.parseIdeas(res.json()));
   }
 
-  // addIdea(idea: Idea):Observable<Idea>{
-  //   let headers = new Headers ({ 'Content-Type': 'application/json' });
-  //   let options = new RequestOptions({ headers: headers, method: "post" });
+  updateIdea(id: number, idea: Idea) {
+    console.log('puuuuut');
+    console.log(idea);
+    console.log(this.url + '/' + id);
+    return this.http.put(this.url + '/' + id, idea);
+  }
 
-  //   console.log(JSON.stringify(idea));
-  //   return this.http.post(this.url,JSON.stringify(idea), options)
-  //   .map(res => Idea.parseIdea(res.json()));
-  // }
+  deleteIdea(id: number)  {
+    return this.http.delete(this.url + '/' + id);
+  }
 
   // updateIdea(idea){
   //   return this.http.put(this.getIdeaUrl(idea.id), JSON.stringify(idea))
