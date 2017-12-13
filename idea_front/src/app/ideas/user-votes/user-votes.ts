@@ -11,9 +11,8 @@ export class UserVote {
         let userVotes: UserVote[] =[];
         for(let a of jsonData){
             userVotes.push(this.parseUserVote(a));
-            //    new Idea( a.id, a.text, a.author, a.date));
         }
-        console.log(userVotes)
+      //  console.log(userVotes)
         return userVotes;
     }
 

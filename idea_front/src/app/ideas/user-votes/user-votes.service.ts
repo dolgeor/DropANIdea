@@ -18,12 +18,12 @@ export class UserVotesService {
 
   constructor(private http: Http) { }
 
-  // getUserVotes(id):Observable<UserVote[]>
-  // {
-  //   console.log('iiii')
-  //   return this.http.get(this.getUserVotesUrlByIdeaId(id))
-  //   .map(res => UserVote.parseUserVotes(res.json()));
-  // }
+  getUserVotes(id):Observable<UserVote[]>
+  {
+    
+    return this.http.get(this.getUserVotesUrlByIdeaId(id))
+    .map(res => UserVote.parseUserVotes(res.json()));
+  }
 
  
   createUserVote(id:number,uv: UserVote){

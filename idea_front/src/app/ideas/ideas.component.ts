@@ -5,7 +5,7 @@ import { UserVote } from './user-votes/user-votes';
 import {Vote} from './user-votes/votes/votes'
 // import {UserVotesComponent} from './user-votes/user-votes.component'
 
-//import {UserVotesService} from './user-votes/user-votes.service'
+import {UserVotesService} from './user-votes/user-votes.service'
 @Component({
   selector: 'idea-root',
   templateUrl: './ideas.component.html',
@@ -16,7 +16,7 @@ export class IdeasComponent   implements OnInit {
   
     
       
-      constructor(private ideasService: IdeasService//,private userVotesService: UserVotesService
+      constructor(private ideasService: IdeasService//, private userVotesService: UserVotesService
       ) { }
         
       ngOnInit() {
@@ -39,7 +39,7 @@ export class IdeasComponent   implements OnInit {
       //   }
       // }
       
-      onClickGetById(val: string) {
+      onClickGetByAuthorName(val: string) {
         if(val == ''){
           this.getAllIdeas();
         }
@@ -47,7 +47,7 @@ export class IdeasComponent   implements OnInit {
           this.ideasService.getIdeaByAuthor(val).subscribe(data =>{ 
             this.ideas=data
             this.ideas.forEach(idea=>{
-              
+                         //   this.userVotesService.getUserVotes(idea.id).subscribe(res=>{idea.userVotes = res;});
                             this.ideasService.getLikesDislikes(idea.id,"like").subscribe(num=>{
                               idea.likes = num;
                             });
@@ -55,7 +55,9 @@ export class IdeasComponent   implements OnInit {
                             this.ideasService.getLikesDislikes(idea.id,"dislike").subscribe(num=>{
                               idea.dislikes = num;
                             });
+                            
                           })
+       //                   console.log(this.ideas)
           });
         }
       }
@@ -69,6 +71,7 @@ export class IdeasComponent   implements OnInit {
         this.getAllIdeas()
        });
       }
+
       onClickLike(id){
       
         // let newUserVote= new UserVote("anon");
@@ -78,14 +81,63 @@ export class IdeasComponent   implements OnInit {
 
         //     this.getAllIdeas()
         //    });
-        let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),true);
-        console.log(vote)
-        this.ideasService.addVote(id,3,vote)
-        .subscribe(data => {
-            console.log('Vote успешно добавлены'),
+
+     
+      //   // if( !this.ideas[id].userVotes){
+      //  if( this.ideas[id].userVotes == undefined){
+      //     let newU = new UserVote("anon");
+      //     this.ideasService.createUserVote(id, newU).subscribe(data => {
+      //           console.log('UserVote успешно добавлены' + id) ,
+      //           this.getAllIdeas(),
+           
+      //           uv_id = this.ideas[id].userVotes.pop().id,
+      //           console.log(' uv_id ' + uv_id )
+      //          ////
+      //          });
+      //         //  console.log('here')
+      //   }
+
+        
+        // let newU = new UserVote("anon");
+        this.ideasService.getIdea(id).subscribe(
+          data => {
             
-            this.getAllIdeas()
-           });
+            if(data.userVotes.length == 0){
+              
+              this.ideasService.createUserVote(id, new UserVote("anon"))
+                .subscribe(res => {
+                        console.log('UserVote успешно добавлены' + id) ,
+                        this.getAllIdeas()
+                 });
+            };
+
+            let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),true);
+           
+            let uv_id = data.userVotes[data.userVotes.length -1].id;
+            //console.log(uv_id);
+            
+            this.ideasService.addVote(id,uv_id,vote)
+            .subscribe(res => {
+                console.log('Vote успешно добавлены dlea uv_id ' + uv_id ),
+                
+                this.getAllIdeas()
+               });
+
+
+          });
+        
+         
+
+
+        
+        // let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),true);
+        // console.log(vote)
+        // this.ideasService.addVote(id,uv_id,vote)
+        // .subscribe(data => {
+        //     console.log('Vote успешно добавлены uv_id ' + uv_id ),
+            
+        //     this.getAllIdeas()
+        //    });
 
 
 
@@ -112,7 +164,7 @@ export class IdeasComponent   implements OnInit {
           {
             this.ideas=data;
             this.ideas.forEach(idea=>{
-
+         //     this.userVotesService.getUserVotes(idea.id).subscribe(res=>{idea.userVotes = res;});
               this.ideasService.getLikesDislikes(idea.id,"like").subscribe(num=>{
                 idea.likes = num;
               });
@@ -121,10 +173,10 @@ export class IdeasComponent   implements OnInit {
                 idea.dislikes = num;
               });
             })
+       //    console.log(this.ideas)
             
           });
         
-       
         
       
       

@@ -1,4 +1,4 @@
-// import { UserVote  } from './user-votes/user-votes';
+ import { UserVote  } from './user-votes/user-votes';
 
 export class Idea {
     id: number
@@ -7,7 +7,7 @@ export class Idea {
     date: string
     likes: number
     dislikes:number
-    // userVotes: UserVote[]
+    userVotes: UserVote[]
    
     constructor( text: string, author: string,  date: string
         // , userVotes: UserVote[]
@@ -35,7 +35,7 @@ export class Idea {
         let idea = new Idea(a.text, a.author, a.date//,a.userVotes
         );
         idea.id = a.id;
-        
+        idea.userVotes = UserVote.parseUserVotes(a.userVotes);
         return idea;
     }
        
