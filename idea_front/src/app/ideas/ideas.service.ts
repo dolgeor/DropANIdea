@@ -10,12 +10,13 @@ import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Rx';
 
 import {Idea} from './ideas'
-
+import {UserVote} from './user-votes/user-votes'
+import {Vote} from './user-votes/votes/votes'
 @Injectable()
 export class IdeasService {
 
   private url: string = "http://localhost:8080/ideas";
-
+ 
   constructor(private http: Http) { }
 
   getIdeas():Observable<Idea[]>
@@ -24,8 +25,12 @@ export class IdeasService {
     .map(res => Idea.parseIdeas(res.json()));
   }
 
- 
 
+  getLikesDislikes(id,type):Observable<number>{
+    
+    return this.http.get(this.url +'/' + id +"/"+type).map(res=>parseInt(res.text()));
+  }
+  
   getIdea(id):Observable<Idea>
   {
     return this.http.get(this.getIdeaUrl(id))
@@ -34,6 +39,15 @@ export class IdeasService {
 
   createIdea(idea: Idea){
     return this.http.post(this.url, idea);  
+  }
+
+
+  createUserVote(id:number,uv: UserVote){
+    return this.http.post(this.url + "/" + id + "/user_votes", uv);
+  }
+  //////////////////////////
+  addVote(idea_id:number, user_vote_id:number,v: Vote){
+    return this.http.post(this.url + "/" + idea_id + "/user_votes/" + user_vote_id + "/votes", v);
   }
 
   getIdeaByAuthor(author: string): Observable<Idea[]> {

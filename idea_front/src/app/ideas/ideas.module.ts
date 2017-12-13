@@ -5,11 +5,13 @@ import { HttpModule }  from '@angular/http';
 
 import { IdeasComponent } from "./ideas.component";
 import { IdeasService } from "./ideas.service";
+import { UserVotesModule } from './user-votes/user-votes.module';
 
 @NgModule({
     imports: [
       CommonModule,
-      HttpModule
+      HttpModule,
+      UserVotesModule
     ],
     declarations: [
         IdeasComponent

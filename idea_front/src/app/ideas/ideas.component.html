@@ -19,7 +19,7 @@
 
 <div class="row">
     <div class="col-sm-4">
-        Enter Idea ID:    
+        Enter author:    
     </div>
     <div class="col-sm-4">
         <div class="form-group">
@@ -37,10 +37,23 @@
     <div class=" panel panel-default ">
         <div class="panel-body">{{idea.text}}</div>
         <div class="panel-footer text-right">
-            <div>posted by: {{idea.author}}</div>
-            <div>{{idea.date}}</div>
-            <div>ID: {{idea.id}}</div>
-         
+            <div class="text-left">posted by: {{idea.author}}</div>
+            <div class="text-left">{{idea.date}}</div>
+            <div class="text-left">ID {{idea.id}}</div>
+            
+            <div>
+                <button (click)="onClickLike(idea.id)" type="button" class="btn btn-default btn">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                    
+                    {{idea.likes}}
+                </button>
+                <button type="button" class="btn btn-default btn">
+                    <span class="glyphicon glyphicon-thumbs-down"></span>
+                    {{idea.dislikes}}
+                    
+                </button>
+            </div>
+
         </div>
       </div>  
 </div>
