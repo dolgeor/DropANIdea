@@ -1,4 +1,4 @@
- import { UserVote  } from './user-votes/user-votes';
+import { UserVote  } from './user-votes/user-votes';
 
 export class Idea {
     id: number

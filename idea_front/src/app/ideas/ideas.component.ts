@@ -12,32 +12,18 @@ import {UserVotesService} from './user-votes/user-votes.service'
   styleUrls: ['./ideas.component.css']
 })
 export class IdeasComponent   implements OnInit {
+
       private ideas: Idea[] = [];
-  
-    
-      
+
       constructor(private ideasService: IdeasService//, private userVotesService: UserVotesService
       ) { }
         
+
       ngOnInit() {
         this.getAllIdeas();
         
       }
 
-      // onClickGetById(val: string) {
-      //   if(val == ''){
-      //     this.getAllIdeas();
-      //   }
-      //   else{
-      //     //this.getIdeaById(parseInt(val));
-      //     this.ideasService.deleteIdea(parseInt(val)).subscribe(
-      //         data => {
-      //         console.log('Данные успешно удалены'),
-      //         this.getAllIdeas()
-      //        });
-         
-      //   }
-      // }
       
       onClickGetByAuthorName(val: string) {
         if(val == ''){
@@ -46,105 +32,96 @@ export class IdeasComponent   implements OnInit {
         else{
           this.ideasService.getIdeaByAuthor(val).subscribe(data =>{ 
             this.ideas=data
-            this.ideas.forEach(idea=>{
-                         //   this.userVotesService.getUserVotes(idea.id).subscribe(res=>{idea.userVotes = res;});
-                            this.ideasService.getLikesDislikes(idea.id,"like").subscribe(num=>{
-                              idea.likes = num;
-                            });
-              
-                            this.ideasService.getLikesDislikes(idea.id,"dislike").subscribe(num=>{
-                              idea.dislikes = num;
-                            });
-                            
-                          })
-       //                   console.log(this.ideas)
+            this.getVotesForAllIdeas()
           });
         }
+      }
+
+      getVotesForAllIdeas(){
+        
+        var nrVotes = this.ideas.length;
+        this.ideas.forEach(idea=>{
+         
+          
+          this.ideasService.getLikesDislikes(idea.id,"like").subscribe(num=>{
+            idea.likes = num;
+          });
+        
+          this.ideasService.getLikesDislikes(idea.id,"dislike").subscribe(num=>{
+              idea.dislikes = num;
+
+              //console.log(nrVotes)
+              if(nrVotes == 1){
+                this.ideas.sort((a, b)=> {
+                //   console.log( b.likes +'    '+ a.likes);
+                return  (b.likes - b.dislikes) - (a.likes - a.dislikes)});
+              }
+              nrVotes--;
+              // console.log('ratinglikes = ' + rating)
+              // rating -= idea.dislikes;
+              // console.log('ratingdislikes = ' + rating)
+
+          });     
+              
+      });
+
       }
 
 
       onClickedAdd(author, text){
         let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
-       console.log(newIdea)
        this.ideasService.createIdea(newIdea).subscribe(data => {
         console.log('Данные успешно добавлены'),
         this.getAllIdeas()
        });
       }
 
-      onClickLike(id){
       
-        // let newUserVote= new UserVote("anon");
-        // console.log(newUserVote)
-        // this.ideasService.createUserVote(id,newUserVote).subscribe(data => {
-        //     console.log('UserVote успешно добавлены'),
-
-        //     this.getAllIdeas()
-        //    });
-
-     
-      //   // if( !this.ideas[id].userVotes){
-      //  if( this.ideas[id].userVotes == undefined){
-      //     let newU = new UserVote("anon");
-      //     this.ideasService.createUserVote(id, newU).subscribe(data => {
-      //           console.log('UserVote успешно добавлены' + id) ,
-      //           this.getAllIdeas(),
-           
-      //           uv_id = this.ideas[id].userVotes.pop().id,
-      //           console.log(' uv_id ' + uv_id )
-      //          ////
-      //          });
-      //         //  console.log('here')
-      //   }
-
-        
-        // let newU = new UserVote("anon");
+      onClickLike(id){
         this.ideasService.getIdea(id).subscribe(
-          data => {
-            
+          data => { 
             if(data.userVotes.length == 0){
-              
               this.ideasService.createUserVote(id, new UserVote("anon"))
                 .subscribe(res => {
                         console.log('UserVote успешно добавлены' + id) ,
-                        this.getAllIdeas()
+                        this.addNewVote(id,true);
                  });
-            };
+          }else{
+            this.addNewVote(id,true);
+          }
+        });
+      }
 
-            let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),true);
-           
+      onClickDislike(id){
+        this.ideasService.getIdea(id).subscribe(
+          data => { 
+            if(data.userVotes.length == 0){
+              this.ideasService.createUserVote(id, new UserVote("anon"))
+                .subscribe(res => {
+                        console.log('UserVote успешно добавлены' + id) ,
+                        this.addNewVote(id,false);
+                 });
+          }else{
+            this.addNewVote(id,false);
+          }
+        });
+      }
+
+      addNewVote(id,type:boolean){
+        console.log(type);
+        this.ideasService.getIdea(id).subscribe(
+          data => {
+            let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),type);
             let uv_id = data.userVotes[data.userVotes.length -1].id;
-            //console.log(uv_id);
             
             this.ideasService.addVote(id,uv_id,vote)
             .subscribe(res => {
-                console.log('Vote успешно добавлены dlea uv_id ' + uv_id ),
-                
-                this.getAllIdeas()
-               });
+                console.log('Vote успешно добавлены dlea uv_id ' + uv_id )
+                this.getVotesForAllIdeas()  
+            });
 
 
           });
-        
-         
-
-
-        
-        // let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),true);
-        // console.log(vote)
-        // this.ideasService.addVote(id,uv_id,vote)
-        // .subscribe(data => {
-        //     console.log('Vote успешно добавлены uv_id ' + uv_id ),
-            
-        //     this.getAllIdeas()
-        //    });
-
-
-
-      //  this.ideasService.createIdea(newIdea).subscribe(data => {
-      //   console.log('Данные успешно добавлены'),
-      //   this.getAllIdeas()
-      //  });
       }
 
       // onClickedAdd(author, text){
@@ -163,23 +140,8 @@ export class IdeasComponent   implements OnInit {
         .subscribe(data => 
           {
             this.ideas=data;
-            this.ideas.forEach(idea=>{
-         //     this.userVotesService.getUserVotes(idea.id).subscribe(res=>{idea.userVotes = res;});
-              this.ideasService.getLikesDislikes(idea.id,"like").subscribe(num=>{
-                idea.likes = num;
-              });
-
-              this.ideasService.getLikesDislikes(idea.id,"dislike").subscribe(num=>{
-                idea.dislikes = num;
-              });
-            })
-       //    console.log(this.ideas)
-            
+            this.getVotesForAllIdeas();
           });
-        
-        
-      
-      
       }
 
       getIdeaById(val: number){
