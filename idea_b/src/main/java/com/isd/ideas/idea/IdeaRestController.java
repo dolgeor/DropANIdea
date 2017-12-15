@@ -1,8 +1,12 @@
 package com.isd.ideas.idea;
 
+
+import com.google.appengine.repackaged.com.google.gson.Gson;
 import com.isd.ideas.user_vote.UserVote;
 import com.isd.ideas.user_vote.UserVoteService;
+import com.isd.ideas.vote.Vote;
 import com.isd.ideas.vote.VoteService;
+import java.math.BigInteger;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,12 +16,17 @@ import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
+
+
 @RestController
 @RequestMapping(value = "/ideas")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class IdeaRestController {
 
     @Autowired
@@ -33,7 +42,14 @@ public class IdeaRestController {
     public ResponseEntity<List<Idea>> listAllIdeas() {
         return ResponseEntity.ok(ideaService.listIdeas());
     }
-
+    
+      @RequestMapping(value = "/rate", method = RequestMethod.GET)
+    public ResponseEntity<List<IdeaJson>> listAllIdeasWithVote() {
+        return ResponseEntity.ok(ideaService.listIdeasWithVote());
+    }
+    
+    
+    
     @RequestMapping(params = "author", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Idea>> getIdeasByAuthor(@RequestParam("author") String author) {
         return ResponseEntity.ok(ideaService.findIdeaByAuthor(author));
@@ -95,9 +111,30 @@ public class IdeaRestController {
     }
     
         ///VoteCOntroller
-//    @RequestMapping(value = "/{id}/user_vote", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<List<UserVote>> getUserVotesOfIdea(@PathVariable("id") long id) {
-//        return ResponseEntity.ok(ideaService.getUserVotesByIdeaId(id));
-//    }
+    @RequestMapping(value = "/{ID}/user_votes/{id}/votes", method = RequestMethod.POST)
+    public ResponseEntity<Void> addVoteToUserVote(@PathVariable("ID") long ID,@PathVariable("id") long id, @RequestBody Vote vote) {
+        
+        ideaService.addVote(id, vote);
+        return ResponseEntity.ok().build();
+    }
     
+    
+    
+     private final static Gson gson = new Gson();
+    
+    
+@RequestMapping(value = "/{id}/{value}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BigInteger> getUserVoteToIdea(@PathVariable("id") long id, @PathVariable("value") String value) {
+//        Gson gson = new GsonBuilder().create();
+//        List<Like> list = new ArrayList<>();
+//        list.add(new Like(ideaService.countLikeDislike(id, value)));
+//        
+        return ResponseEntity.ok(ideaService.countLikeDislike(id, value));
+       // return ResponseEntity.ok(gson.toJson( "likes:" + ideaService.countLikeDislike(id, value)));
+    }
+    
+    class Like {
+        BigInteger like;
+        Like(BigInteger like){this.like = like;}
+    }
 }

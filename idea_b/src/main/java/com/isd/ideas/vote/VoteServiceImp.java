@@ -22,7 +22,19 @@ public class VoteServiceImp implements VoteService {
         return votes;
     }
 
+    @Override
+    public void createVote(Vote vote) {
 
+        System.out.println("Creating Vote : " + vote);
+        if (repo.exists(vote.getId())) {
+            throw new IdeaException("Vote with id " + vote.getId() + " already exists");
+        }
+        repo.save(vote);
+
+    }
+    }
+
+    
 
    
-}
+

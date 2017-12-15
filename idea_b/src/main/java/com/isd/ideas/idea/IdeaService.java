@@ -2,6 +2,7 @@ package com.isd.ideas.idea;
 
 import com.isd.ideas.user_vote.UserVote;
 import com.isd.ideas.vote.Vote;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.util.List;
 
@@ -30,5 +31,9 @@ public interface IdeaService {
     
     //Votes
     
+    public BigInteger countLikeDislike(long id, String string);
     
+    public void addVote(long id, Vote vote);
+    
+    public List<IdeaJson> listIdeasWithVote();
 }

@@ -3,10 +3,17 @@ package com.isd.ideas.idea;
 
 import com.isd.ideas.user_vote.UserVote;
 import com.isd.ideas.user_vote.UserVoteRepo;
+import com.isd.ideas.vote.Vote;
+import com.isd.ideas.vote.VoteRepo;
+import java.math.BigInteger;
 
 import java.sql.Date;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service("ideaService")
@@ -18,6 +25,16 @@ public class IdeaServiceImp implements IdeaService {
     @Autowired
     UserVoteRepo repoUserVote;
 
+    @Autowired
+    VoteRepo repoVote;
+    
+    @PersistenceContext
+    EntityManager em;
+    
+    private final JdbcTemplate jdbcTemplate;
+    public IdeaServiceImp(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
     @Override
     public void createIdea(Idea idea) {
 
@@ -110,6 +127,25 @@ public class IdeaServiceImp implements IdeaService {
     }
     
     @Override
+    public void addVote(long id, Vote vote) {
+        
+        System.out.println("Fetching USerVote with id " + id);
+        if (!repoUserVote.exists(id)) {
+            throw new IdeaException("There is no UserVote with id: " + id);
+        }
+        UserVote userVote = repoUserVote.findByid(id);
+        
+
+        System.out.println("Creating Vote for  UserVote: " + userVote.getId());
+        if (repoVote.exists(vote.getId())) {
+            throw new IdeaException("Vote with id " + vote.getId() + " already exists");
+        }
+        userVote.getVotes().add(new Vote(vote, userVote));
+
+        repoUserVote.save(userVote);
+    }
+    
+    @Override
     public List<UserVote> getUserVotesByIdeaId(long id) {
         List<UserVote> list = findIdeaById(id).getUserVotes();
         if (list.isEmpty()) {
@@ -119,7 +155,34 @@ public class IdeaServiceImp implements IdeaService {
     }
 
     ///Votes
+
     
     
     
+    
+    
+    
+    @Override
+    public BigInteger countLikeDislike(long id, String string) {
+        if (!(string.equals("like") || string.equals("dislike")))
+            throw new IdeaException("Wrong adress!");
+        boolean value = false;
+        if (string.equals("like"))
+            value = true;
+        Query q = em.createNativeQuery("SELECT  COUNT(*) FROM user_vote_t  INNER  JOIN vote_t ON (user_vote_t.id = vote_t.user_vote_id) WHERE (user_vote_t.idea_id = :key) and (vote_t.like_dislike = :value)");
+        q.setParameter("key", id);
+        q.setParameter("value", value);
+        BigInteger listLike = (BigInteger) q.getSingleResult();
+        
+        
+        return listLike;
+    }
+ 
+    
+      @Override
+    public List<IdeaJson> listIdeasWithVote() {
+        String sql = "select t.id as idea_id, t.text as text, likes.likes as likes, dislikes.dislikes as dislikes, author, idea_date from idea_t t left join (select idea_id, count(vote_t.id) as likes from vote_t inner join user_vote_t on user_vote_t.id = vote_t.user_vote_id where like_dislike = true group by user_vote_t.idea_id) as likes on t.id = likes.idea_id left join (select idea_id, count(vote_t.id) as dislikes from vote_t inner join user_vote_t on user_vote_t.id = vote_t.user_vote_id where like_dislike = false group by user_vote_t.idea_id) as dislikes on t.id = dislikes.idea_id order by (dislikes.dislikes - likes.likes)";
+        List <IdeaJson> listIdeas = jdbcTemplate.query(sql, new IdeaMapper());
+        return listIdeas;
+    }
 }
