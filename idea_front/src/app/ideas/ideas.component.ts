@@ -14,32 +14,76 @@ import {UserVotesService} from './user-votes/user-votes.service'
 export class IdeasComponent   implements OnInit {
 
       private ideas: Idea[] = [];
+      private pages: number[] = [];
+      private currentPage = 1;
+      private findBYAuth = false;
 
       constructor(private ideasService: IdeasService ) { 
-      //   setInterval(() => {this.getVotesForAllIdeas()}, 1000 * 2);///refresh data
+        // setInterval(() => {
+        //   if(this.findBYAuth){
+        //     this.getVotesForAllIdeas()
+        //   }else{
+        //     this.getAllIdeasWithVotes()
+        //   }
+        // }, 1000 * 2);///refresh data
       }
         
 
       ngOnInit() {
         this.getAllIdeasWithVotes();
-        
+       
       }
 
 
-      getAllIdeasWithVotes(){
-        this.ideasService.getSortedIdeasWithVotes()
+
+
+      
+      getAllIdeas(){
+        this.ideasService.getIdeas()
         .subscribe(data => 
           {
             this.ideas=data;
-            console.log(data)
+            this.getVotesForAllIdeas();
           });
       }
+
+      getAllIdeasWithVotes(){
+        this.findBYAuth = false;
+        this.ideasService.getSortedIdeasWithVotes()
+        .subscribe(data => 
+          { 
+            this.pages= new Array(Math.trunc((data.length + 9) / 10));
+            for (var _i = 0; _i < this.pages.length; _i++) {
+              this.pages[_i] = _i + 1;
+            }
+            //console.log('cp =  ' + this.currentPage)
+            this.ideas = data.slice(10 * this.currentPage - 10 , 10 * this.currentPage)
+            //console.log(this.ideas.length)
+          });
+      }
+      setPage(page){
+        this.currentPage = page;
+        this.getAllIdeasWithVotes();
+      }
+      setNextPage(){
+        if(this.currentPage < this.pages.length)
+           this.currentPage++;
+        this.getAllIdeasWithVotes();
+      }
+      setPrevPage(){
+        if(this.currentPage > 1)
+          this.currentPage--;
+        this.getAllIdeasWithVotes();
+      }
+
       
       onClickGetByAuthorName(val: string) {
         if(val == ''){
-          this.getAllIdeasWithVotes();
+         // this.getAllIdeas();
+         this.getAllIdeasWithVotes();
         }
         else{
+          this.findBYAuth = true;
           this.ideasService.getIdeaByAuthor(val).subscribe(data =>{ 
             this.ideas=data
             this.getVotesForAllIdeas()
@@ -82,7 +126,7 @@ export class IdeasComponent   implements OnInit {
         let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
        this.ideasService.createIdea(newIdea).subscribe(data => {
         console.log('Данные успешно добавлены'),
-        this.getAllIdeasWithVotes();
+        this.onClickGetByAuthorName(author);
        });
       }
 
@@ -145,14 +189,6 @@ export class IdeasComponent   implements OnInit {
 
       // uvc:UserVotesComponent;
   
-      getAllIdeas(){
-        this.ideasService.getIdeas()
-        .subscribe(data => 
-          {
-            this.ideas=data;
-            this.getVotesForAllIdeas();
-          });
-      }
 
       getIdeaById(val: number){
         this.ideasService.getIdea(val)

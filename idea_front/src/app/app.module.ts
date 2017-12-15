@@ -15,7 +15,9 @@ import { HeaderModule} from './ideas/header.module'
     BrowserModule,
     HttpModule,
     IdeasModule,
-    HeaderModule
+    HeaderModule,
+
+    
     
   ],
   providers: [],
