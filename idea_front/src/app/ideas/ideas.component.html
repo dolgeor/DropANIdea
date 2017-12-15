@@ -1,5 +1,5 @@
 <div class="row">
-    <h1>Drop an Idea</h1>
+    <h1 class="text-center">Drop an Idea</h1>
     <form>
       <div class="form-group">
         <label for="name">Text</label>
@@ -11,25 +11,33 @@
         <input #ideaAuth type="text" class="form-control" id="alterEgo">
       </div>
  
-      <button (click)="onClickedAdd(ideaAuth.value, ideaText.value)" type="button" class="btn btn-success">Add</button>
- 
+      <div  class="text-right">
+      <button (click)="onClickedAdd(ideaAuth.value, ideaText.value)" type="button" class="btn btn-success btn-circle btn-xl ">
+        <i class="glyphicon glyphicon-plus"></i>
+        </button>
+        </div>
     </form>
-</div>
-<br><br><br>
+</div>   
+
+<br>
 
 <div class="row">
+    <div class="col-sm-4"></div>
     <div class="col-sm-4">
-        Enter author:    
+            <div class="input-group">
+            <input #idVal  (keyup.enter)="onClickGetByAuthorName(idVal.value)"  placeholder="Search by author" class="form-control">
+            <div class="input-group-btn">
+                <button (click)="onClickGetByAuthorName(idVal.value)" type="button"  class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+            </div>
     </div>
-    <div class="col-sm-4">
-        <div class="form-group">
-            <input #idVal  (keyup.enter)="onClickGetByAuthorName(idVal.value)" class="form-control">
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <button (click)="onClickGetByAuthorName(idVal.value)" type="button" class="btn btn-primary">Find</button>  
-    </div>
-</div>
+    <div class="col-sm-2"></div>
+</div> 
+
+
+
+<br>
+
 
 <div class="row">
 <div class="well well-lg" *ngFor="let idea of ideas">
@@ -42,6 +50,7 @@
             <div class="text-left">ID {{idea.id}}</div>
             
             <div>
+                    {{idea.likes - idea.dislikes}}
                 <!-- (change!!!!) -->
                 <button (click)="onClickLike(idea.id)"  type="button" class="btn btn-default btn">
                     <span class="glyphicon glyphicon-thumbs-up"></span>

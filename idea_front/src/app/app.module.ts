@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HttpModule } from '@angular/http';
 import { IdeasModule } from './ideas/ideas.module';
 
-
+import { HeaderModule} from './ideas/header.module'
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +14,8 @@ import { IdeasModule } from './ideas/ideas.module';
   imports: [
     BrowserModule,
     HttpModule,
-    IdeasModule
+    IdeasModule,
+    HeaderModule
     
   ],
   providers: [],

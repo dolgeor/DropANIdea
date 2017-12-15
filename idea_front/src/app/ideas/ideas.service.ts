@@ -25,6 +25,12 @@ export class IdeasService {
     .map(res => Idea.parseIdeas(res.json()));
   }
 
+  getSortedIdeasWithVotes():Observable<Idea[]>
+  {
+    return this.http.get(this.url +'/rate')
+    .map(res => Idea.parseIdeasWithVotes(res.json()));
+  }
+
 
   getLikesDislikes(id,type):Observable<number>{
     

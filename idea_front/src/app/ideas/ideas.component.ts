@@ -15,19 +15,29 @@ export class IdeasComponent   implements OnInit {
 
       private ideas: Idea[] = [];
 
-      constructor(private ideasService: IdeasService//, private userVotesService: UserVotesService
-      ) { }
+      constructor(private ideasService: IdeasService ) { 
+      //   setInterval(() => {this.getVotesForAllIdeas()}, 1000 * 2);///refresh data
+      }
         
 
       ngOnInit() {
-        this.getAllIdeas();
+        this.getAllIdeasWithVotes();
         
       }
 
+
+      getAllIdeasWithVotes(){
+        this.ideasService.getSortedIdeasWithVotes()
+        .subscribe(data => 
+          {
+            this.ideas=data;
+            console.log(data)
+          });
+      }
       
       onClickGetByAuthorName(val: string) {
         if(val == ''){
-          this.getAllIdeas();
+          this.getAllIdeasWithVotes();
         }
         else{
           this.ideasService.getIdeaByAuthor(val).subscribe(data =>{ 
@@ -72,7 +82,7 @@ export class IdeasComponent   implements OnInit {
         let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
        this.ideasService.createIdea(newIdea).subscribe(data => {
         console.log('Данные успешно добавлены'),
-        this.getAllIdeas()
+        this.getAllIdeasWithVotes();
        });
       }
 

@@ -30,7 +30,7 @@ export class Idea {
       //  console.log(ideas);
         return ideas;
     }
-
+    
     static parseIdea(a:any): Idea {
         let idea = new Idea(a.text, a.author, a.date//,a.userVotes
         );
@@ -38,6 +38,24 @@ export class Idea {
         idea.userVotes = UserVote.parseUserVotes(a.userVotes);
         return idea;
     }
+
+    static parseIdeasWithVotes(jsonData:any): Idea[] {
+          let ideas: Idea[] =[];
+          for(let a of jsonData){
+              ideas.push(this.parseIdeaWithVotes(a));
+          }
+          return ideas;
+      }
+      
+      static parseIdeaWithVotes(a:any): Idea {
+          let idea = new Idea(a.text, a.author, a.date
+          );
+          idea.id = a.id;
+          
+          idea.likes =a.likes;
+          idea.dislikes =a.dislikes;
+          return idea;
+      }
        
    }
        

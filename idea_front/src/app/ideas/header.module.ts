@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { HttpModule }  from '@angular/http';
 
-import { IdeasComponent } from "./ideas.component";
 import { IdeasService } from "./ideas.service";
 import { UserVotesModule } from './user-votes/user-votes.module';
 
@@ -17,13 +16,13 @@ import { HeaderComponent } from "./header.component";
       UserVotesModule
     ],
     declarations: [
-        IdeasComponent
+      HeaderComponent
     ],
     exports: [
-      IdeasComponent
+      HeaderComponent
     ],
     providers: [
      IdeasService
     ]
   })
-  export class IdeasModule { }
+  export class HeaderModule { }
