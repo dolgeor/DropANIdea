@@ -48,7 +48,30 @@
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
-
+    <dependency>
+      <groupId>com.github.jinahya</groupId>
+      <artifactId>json-retrotranslated</artifactId>
+      <version>20170516</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-api-1.0-sdk</artifactId>
+      <version>1.9.59</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.appengine</groupId>
+      <artifactId>appengine-tools-sdk</artifactId>
+      <version>1.9.59</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.gae</artifactId>
+      <version>1.9.54_1</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 
   <properties>

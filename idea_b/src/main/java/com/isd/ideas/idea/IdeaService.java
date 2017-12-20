@@ -36,4 +36,6 @@ public interface IdeaService {
     public void addVote(long id, Vote vote);
     
     public List<IdeaJson> listIdeasWithVote();
+    
+    public BigInteger isVotedAtDateByUserVote(long id,Date date);
 }

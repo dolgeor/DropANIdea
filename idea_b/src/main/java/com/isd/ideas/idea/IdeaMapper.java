@@ -20,7 +20,7 @@ public class IdeaMapper implements RowMapper<IdeaJson> {
        
         IdeaJson jsonObj = new IdeaJson();
        
-        jsonObj.setId(rs.getLong("idea_id"));
+        jsonObj.setId(rs.getLong("id"));
        
         jsonObj.setAuthor(rs.getString("author"));
        

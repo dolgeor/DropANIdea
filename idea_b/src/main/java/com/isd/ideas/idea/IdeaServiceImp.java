@@ -181,8 +181,19 @@ public class IdeaServiceImp implements IdeaService {
     
       @Override
     public List<IdeaJson> listIdeasWithVote() {
-        String sql = "select t.id as idea_id, t.text as text, likes.likes as likes, dislikes.dislikes as dislikes, author, idea_date from idea_t t left join (select idea_id, count(vote_t.id) as likes from vote_t inner join user_vote_t on user_vote_t.id = vote_t.user_vote_id where like_dislike = true group by user_vote_t.idea_id) as likes on t.id = likes.idea_id left join (select idea_id, count(vote_t.id) as dislikes from vote_t inner join user_vote_t on user_vote_t.id = vote_t.user_vote_id where like_dislike = false group by user_vote_t.idea_id) as dislikes on t.id = dislikes.idea_id order by (dislikes.dislikes - likes.likes)";
+        String sql = "select t.id as id, t.text as text, likes.likes as likes, dislikes.dislikes as dislikes, author, idea_date from (idea_t t left join (select idea_id, count(vote_t.id) as likes from vote_t inner join user_vote_t on user_vote_t.id = vote_t.user_vote_id where like_dislike = true group by user_vote_t.idea_id) as likes on t.id = likes.idea_id left join (select idea_id, count(vote_t.id) as dislikes from vote_t inner join user_vote_t on user_vote_t.id = vote_t.user_vote_id where like_dislike = false group by user_vote_t.idea_id) as dislikes on t.id = dislikes.idea_id)order by (coalesce(likes, 0) - coalesce(dislikes, 0)) desc, t.id desc";
         List <IdeaJson> listIdeas = jdbcTemplate.query(sql, new IdeaMapper());
         return listIdeas;
     }
+
+    @Override
+    public BigInteger isVotedAtDateByUserVote(long id, Date date) {
+        Query q = em.createNativeQuery("SELECT CAST(CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS bigint) FROM vote_t where user_vote_id=:id AND vote_date=:date");
+        q.setParameter("id", id);
+        q.setParameter("date",date);
+        return (BigInteger) q.getSingleResult();
+    }
+    
+    
+
 }

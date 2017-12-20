@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface UserVoteRepo extends CrudRepository<UserVote, Long>{
         UserVote findByVotingPersonAndIdea(String votingPreson,Idea idea);
         UserVote findByid(long id);
+        
 }

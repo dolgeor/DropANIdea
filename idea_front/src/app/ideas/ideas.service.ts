@@ -15,7 +15,7 @@ import {Vote} from './user-votes/votes/votes'
 @Injectable()
 export class IdeasService {
 
-  private url: string = "http://localhost:8080/ideas";
+  private url: string = "http://172.17.41.144:8080/ideas";
  
   constructor(private http: Http) { }
 
@@ -37,10 +37,34 @@ export class IdeasService {
     return this.http.get(this.url +'/' + id +"/"+type).map(res=>parseInt(res.text()));
   }
   
+  getUserVoteByVoter(id,voter)
+  {
+    return this.http.get(this.url +'/' + id +"/user_votes?voted_by=" + voter)
+      .map(res => res.json());
+  }
+  
+  getUserVoteByVoterAndIdea(id,voter)
+  {
+    return this.http.get(this.url +'/' + id +"/user_votes?voter=" + voter)
+      .map(res => UserVote.parseUserVote(res.json()));
+  }
+  
+  
+  isVotedAtDateByUserVote(id,uv_id,date)
+  {
+    return this.http.get(this.url +'/' + id +"/user_votes/" + uv_id + "/votes/" +date)
+      .map(res =>res.json());
+  }
+
   getIdea(id):Observable<Idea>
   {
     return this.http.get(this.getIdeaUrl(id))
       .map(res => Idea.parseIdea(res.json()));
+  }
+
+  getUserIP(){
+    return this.http.get(this.url + '/IP')
+    .map(res => res.text());
   }
 
   createIdea(idea: Idea){
