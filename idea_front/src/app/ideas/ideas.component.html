@@ -1,9 +1,13 @@
+
+<simple-notifications [options]="options"></simple-notifications>
+
 <div class="row">
     <h1 class="text-center">Drop an Idea</h1>
     <form>
       <div class="form-group">
         <label for="name">Text</label>
-        <input #ideaText type="text" name="username" class="form-control" id="name" required>
+        <textarea #ideaText  name="username" class="form-control"  rows="5" id="name" required></textarea>
+       
         <div *ngIf="errorText" class="alert alert-danger">
             Expected text!
         </div>
@@ -24,6 +28,7 @@
         </div>
     </form>
 </div>   
+
 
 
 <div class="row">

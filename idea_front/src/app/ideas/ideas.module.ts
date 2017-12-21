@@ -10,11 +10,15 @@ import { UserVotesModule } from './user-votes/user-votes.module';
 import { HeaderComponent } from "./header.component";
 
 
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 @NgModule({
     imports: [
       CommonModule,
       HttpModule,
-      UserVotesModule
+      UserVotesModule,
+
+      SimpleNotificationsModule.forRoot()
     ],
     declarations: [
         IdeasComponent

@@ -3,9 +3,11 @@ import {IdeasService} from "./ideas.service";
 import {Idea} from "./ideas";
 import { UserVote } from './user-votes/user-votes';
 import {Vote} from './user-votes/votes/votes'
-// import {UserVotesComponent} from './user-votes/user-votes.component'
+
 
 import {UserVotesService} from './user-votes/user-votes.service'
+
+import {NotificationsService} from 'angular2-notifications'
 @Component({
   selector: 'idea-root',
   templateUrl: './ideas.component.html',
@@ -20,8 +22,14 @@ export class IdeasComponent   implements OnInit {
       private errorMSG = false;
       private errorText = false;
       private errorAuthor = false;
+      public options = {
+        position: ["top", "right"],
+        timeOut:5000
+      }
 
-      constructor(private ideasService: IdeasService ) { 
+
+
+      constructor(private ideasService: IdeasService, private _service: NotificationsService ) { 
         setInterval(() => {
           console.log('refresh')
           if(this.findBYAuth){
@@ -31,10 +39,10 @@ export class IdeasComponent   implements OnInit {
           }
         }, 1000 * 2);///refresh data
       }
-        
-
+      
       ngOnInit() {
         this.getAllIdeasWithVotes();
+       
       }
 
 
@@ -98,8 +106,10 @@ export class IdeasComponent   implements OnInit {
           this.errorMSG = false;
           this.ideasService.getIdeaByAuthor(val).subscribe(data =>{ 
             this.ideas=data
-            if(this.ideas.length == 0)
+            if(this.ideas.length == 0){
               this.errorMSG =true;
+              
+            }
             this.getVotesForAllIdeas()
 
           })
@@ -152,6 +162,17 @@ export class IdeasComponent   implements OnInit {
           let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
             this.ideasService.createIdea(newIdea).subscribe(data => {
             console.log('Данные успешно добавлены'),
+            this._service.success(
+              '',
+              'Idea is successfully added',
+              {
+                  timeOut: 3000,
+                  showProgressBar: false,
+                  pauseOnHover: false,
+                  clickToClose: true,
+                  maxLength: 10
+              }
+            ),    
             this.onClickGetByAuthorName(author);
           });
         
@@ -161,7 +182,7 @@ export class IdeasComponent   implements OnInit {
 
       
       onClickLike(id){
-
+        
         this.ideasService.getIdea(id).subscribe(data =>{
           var IP;
           this.ideasService.getUserIP()
@@ -226,6 +247,7 @@ export class IdeasComponent   implements OnInit {
       // }
 
       addNewVote(id,voter,type:boolean){
+       
         this.errorAuthor = false;
         this.errorText = false;
         this.ideasService.getIdea(id).subscribe(
@@ -235,7 +257,18 @@ export class IdeasComponent   implements OnInit {
             this.ideasService.getUserVoteByVoterAndIdea(id,voter).subscribe(uv_id=>{
               this.ideasService.isVotedAtDateByUserVote(id,uv_id.id,vote.voteDate).subscribe(is =>{
                 if(is == 1){
-                  alert("You have voted for this idea today");
+                  this._service.info(
+                    '',
+                    'You have voted for this idea today',
+                    {
+                        timeOut: 3000,
+                        showProgressBar: false,
+                        pauseOnHover: false,
+                        clickToClose: true,
+                        maxLength: 10
+                    }
+                  )  
+                //  alert("You have voted for this idea today");
                 }else{
                   this.ideasService.addVote(id,uv_id.id,vote)
                   .subscribe(res => {

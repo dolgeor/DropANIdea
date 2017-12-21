@@ -7,6 +7,9 @@ import { HttpModule } from '@angular/http';
 import { IdeasModule } from './ideas/ideas.module';
 
 import { HeaderModule} from './ideas/header.module'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -15,9 +18,8 @@ import { HeaderModule} from './ideas/header.module'
     BrowserModule,
     HttpModule,
     IdeasModule,
-    HeaderModule
-
-    
+    HeaderModule,
+    BrowserAnimationsModule
     
   ],
   providers: [],
