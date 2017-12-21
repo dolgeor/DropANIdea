@@ -3,12 +3,18 @@
     <form>
       <div class="form-group">
         <label for="name">Text</label>
-        <input #ideaText type="text" class="form-control" id="name" required>
-      </div>
+        <input #ideaText type="text" name="username" class="form-control" id="name" required>
+        <div *ngIf="errorText" class="alert alert-danger">
+            Expected text!
+        </div>
+     </div>
  
       <div class="form-group">
         <label for="alterEgo">Author</label>
-        <input #ideaAuth type="text" class="form-control" id="alterEgo">
+        <input #ideaAuth type="text"  class="form-control" id="alterEgo">
+        <div  *ngIf="errorAuthor" class="alert alert-danger">
+            Expected author!
+        </div>
       </div>
  
       <div  class="text-right">
@@ -19,7 +25,6 @@
     </form>
 </div>   
 
-<br>
 
 <div class="row">
     <div class="col-sm-4"></div>
@@ -27,7 +32,8 @@
             <div class="input-group">
             <input #idVal  (keyup.enter)="onClickGetByAuthorName(idVal.value)"  placeholder="Search by author" class="form-control">
             <div class="input-group-btn">
-                <button (click)="onClickGetByAuthorName(idVal.value)" type="button"  class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
+                <button (click)="onClickGetByAuthorName(idVal.value)" type="button"  class="btn btn-primary">
+                    <i class="glyphicon glyphicon-search"></i></button>
             </div>
             </div>
     </div>
@@ -37,6 +43,11 @@
 
 
 <br>
+
+<div *ngIf="errorMSG" class="row">
+        <div class="well well-lg">Search did not return any results</div>
+</div>
+
 
 
 <div class="row">
@@ -50,23 +61,29 @@
             <!-- <div class="text-left">ID {{idea.id}}</div> -->
             
             
-            <div>
-                    {{idea.likes - idea.dislikes}}
+            <div >
+                    <span>Rating: {{idea.likes - idea.dislikes}}</span>
                 <!-- (change!!!!) -->
                 <button (click)="onClickLike(idea.id)"  type="button" class="btn btn-default btn">
-                    <span class="glyphicon glyphicon-thumbs-up"></span>
-                    
+                    <span class="glyphicon glyphicon-thumbs-up"></span> 
                     {{idea.likes}}
                 </button>
+
+                     
+
                 <button (click)="onClickDislike(idea.id)"type="button" class="btn btn-default btn">
                     <span class="glyphicon glyphicon-thumbs-down"></span>
                     {{idea.dislikes}}
-                    
                 </button>
             </div>
+            
+           <!-- {{rating}} -->
 
         </div>
       </div>  
+      
+      
+
 </div>
 </div>
 </div>

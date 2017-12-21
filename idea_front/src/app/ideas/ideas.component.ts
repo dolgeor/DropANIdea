@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, transition } from '@angular/core';
 import {IdeasService} from "./ideas.service";
 import {Idea} from "./ideas";
 import { UserVote } from './user-votes/user-votes';
@@ -17,6 +17,9 @@ export class IdeasComponent   implements OnInit {
       private pages: number[] = [];
       private currentPage = 1;
       private findBYAuth = false;
+      private errorMSG = false;
+      private errorText = false;
+      private errorAuthor = false;
 
       constructor(private ideasService: IdeasService ) { 
         setInterval(() => {
@@ -27,15 +30,11 @@ export class IdeasComponent   implements OnInit {
             this.getAllIdeasWithVotes()
           }
         }, 1000 * 2);///refresh data
-        
-        
       }
         
 
       ngOnInit() {
         this.getAllIdeasWithVotes();
-    //    this.ideasService.getUserIP().subscribe(data => {console.log(data)})
-        
       }
 
 
@@ -52,6 +51,7 @@ export class IdeasComponent   implements OnInit {
       }
 
       getAllIdeasWithVotes(){
+        this.errorMSG = false;
         this.findBYAuth = false;
         this.ideasService.getSortedIdeasWithVotes()
         .subscribe(data => 
@@ -66,15 +66,21 @@ export class IdeasComponent   implements OnInit {
           });
       }
       setPage(page){
+        this.errorAuthor = false;
+        this.errorText = false;
         this.currentPage = page;
         this.getAllIdeasWithVotes();
       }
       setNextPage(){
+        this.errorAuthor = false;
+        this.errorText = false;
         if(this.currentPage < this.pages.length)
            this.currentPage++;
         this.getAllIdeasWithVotes();
       }
       setPrevPage(){
+        this.errorAuthor = false;
+        this.errorText = false;
         if(this.currentPage > 1)
           this.currentPage--;
         this.getAllIdeasWithVotes();
@@ -82,18 +88,24 @@ export class IdeasComponent   implements OnInit {
 
       
       onClickGetByAuthorName(val: string) {
+        this.errorAuthor = false;
+        this.errorText = false;
         if(val == ''){
-         // this.getAllIdeas();
          this.getAllIdeasWithVotes();
         }
         else{
           this.findBYAuth = true;
+          this.errorMSG = false;
           this.ideasService.getIdeaByAuthor(val).subscribe(data =>{ 
             this.ideas=data
+            if(this.ideas.length == 0)
+              this.errorMSG =true;
             this.getVotesForAllIdeas()
-          });
+
+          })
         }
       }
+
 
       getVotesForAllIdeas(){
         
@@ -127,11 +139,24 @@ export class IdeasComponent   implements OnInit {
 
 
       onClickedAdd(author, text){
-        let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
-       this.ideasService.createIdea(newIdea).subscribe(data => {
-        console.log('Данные успешно добавлены'),
-        this.onClickGetByAuthorName(author);
-       });
+        this.errorAuthor = false;
+        this.errorText = false;
+        if (!author){
+          this.errorAuthor = true;
+        }
+        if (!text){
+          this.errorText = true;
+        }
+        if(author && text)            
+        {
+          let newIdea = new Idea(text,author,new Date().toJSON().slice(0,10).replace(/-/g,'-'))
+            this.ideasService.createIdea(newIdea).subscribe(data => {
+            console.log('Данные успешно добавлены'),
+            this.onClickGetByAuthorName(author);
+          });
+        
+        }
+        
       }
 
       
@@ -201,6 +226,8 @@ export class IdeasComponent   implements OnInit {
       // }
 
       addNewVote(id,voter,type:boolean){
+        this.errorAuthor = false;
+        this.errorText = false;
         this.ideasService.getIdea(id).subscribe(
           data => {
             let vote= new Vote(new Date().toJSON().slice(0,10).replace(/-/g,'-'),type);

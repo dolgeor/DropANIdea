@@ -96,10 +96,10 @@ public class IdeaServiceImp implements IdeaService {
     @Override
     public List<Idea> findIdeaByAuthor(String author) {
        System.out.println("Fetching Ideas created by " + author);
-        List<Idea> ideas = repo.findByauthor(author);
-        if (ideas.isEmpty()) {
-            throw new IdeaException("There are no Ideas created by " + author);
-        }
+        List<Idea> ideas = repo.findByauthorIgnoreCase(author);
+//        if (ideas.isEmpty()) {
+//            throw new IdeaException("There are no Ideas created by " + author);
+//        }
         return ideas; 
     }
 
@@ -107,9 +107,9 @@ public class IdeaServiceImp implements IdeaService {
     public List<Idea> findByDate(Date date) {
         System.out.println("Fetching Ideas created at" + date);
         List<Idea> ideas = repo.findBydate(date);
-        if (ideas.isEmpty()) {
-            throw new IdeaException("There are no Ideas created at " + date);
-        }
+//        if (ideas.isEmpty()) {
+//            throw new IdeaException("There are no Ideas created at " + date);
+//        }
         return ideas; 
     }
 
