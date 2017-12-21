@@ -4,8 +4,11 @@ import java.sql.Date;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
-public interface IdeaRepo extends CrudRepository<Idea, Long>{
-	Idea findByid(long id);  
-        List<Idea> findByauthorIgnoreCase(String author);
-        List<Idea> findBydate(Date date);
+public interface IdeaRepo extends CrudRepository<Idea, Long> {
+
+    Idea findByid(long id);
+
+    List<Idea> findByauthorIgnoreCase(String author);
+
+    List<Idea> findBydate(Date date);
 }

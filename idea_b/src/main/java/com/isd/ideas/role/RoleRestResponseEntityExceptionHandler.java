@@ -17,13 +17,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @ControllerAdvice
 public class RoleRestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
- 
+
     @ExceptionHandler(value = {RoleException.class})
     protected ResponseEntity<RoleTypeException> handleUserException(RoleException e) {
         return new ResponseEntity<>(new RoleTypeException(e.toString()), HttpStatus.NOT_FOUND);
     }
-   
+
     private static class RoleTypeException {
+
         private String message;
 
         public RoleTypeException(String message) {
@@ -40,8 +41,7 @@ public class RoleRestResponseEntityExceptionHandler extends ResponseEntityExcept
         public void setMessage(String message) {
             this.message = message;
         }
-        
+
     }
-        
-    
+
 }

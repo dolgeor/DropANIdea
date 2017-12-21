@@ -1,7 +1,6 @@
 package com.isd.ideas.role;
 
 import com.isd.ideas.user.User;
-import com.isd.ideas.user_vote.UserVote;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -18,7 +17,8 @@ import javax.persistence.UniqueConstraint;
 
 @Table(name = "role_t",
         uniqueConstraints = {
-            @UniqueConstraint(columnNames = "id"),
+            @UniqueConstraint(columnNames = "id")
+            ,
             @UniqueConstraint(columnNames = "type")}
 )
 public class Role {
@@ -30,14 +30,14 @@ public class Role {
 
     @Column(name = "type", unique = true, nullable = false)
     private String type;
-    
+
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private List<User> users;
-    
+
     public void setUser(List<User> users) {
         this.users = users;
     }
-    
+
     public List<User> getUsers() {
         return users;
     }
@@ -46,9 +46,11 @@ public class Role {
         this.id = id;
         this.type = type;
     }
+
     public Role() {
-       
+
     }
+
     public long getId() {
         return id;
     }
@@ -102,6 +104,5 @@ public class Role {
         }
         return true;
     }
-    
-    
+
 }

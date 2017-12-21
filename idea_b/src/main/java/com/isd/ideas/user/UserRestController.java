@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping(value = "/user")
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin
 public class UserRestController {
 
     @Autowired
@@ -31,8 +31,7 @@ public class UserRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@RequestBody User user)
-    {
+    public ResponseEntity<Void> createUser(@RequestBody User user) {
         userService.createUser(user);
         return ResponseEntity.ok().build();
     }
@@ -46,6 +45,6 @@ public class UserRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
-       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

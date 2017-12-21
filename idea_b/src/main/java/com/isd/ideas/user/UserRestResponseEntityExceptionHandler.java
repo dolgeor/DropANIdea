@@ -17,13 +17,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @ControllerAdvice
 public class UserRestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
- 
+
     @ExceptionHandler(value = {UserException.class})
     protected ResponseEntity<UserTypeException> handleUserException(UserException e) {
         return new ResponseEntity<>(new UserTypeException(e.toString()), HttpStatus.NOT_FOUND);
     }
-   
+
     private static class UserTypeException {
+
         private String message;
 
         public UserTypeException(String message) {
@@ -40,6 +41,6 @@ public class UserRestResponseEntityExceptionHandler extends ResponseEntityExcept
         public void setMessage(String message) {
             this.message = message;
         }
-        
+
     }
 }

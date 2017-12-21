@@ -17,17 +17,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @ControllerAdvice
 public class IdeaRestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
- 
-    
-    @ExceptionHandler(value = { IdeaException.class})
+
+    @ExceptionHandler(value = {IdeaException.class})
     protected ResponseEntity<IdeaTypeException> handleIdeaException(IdeaException e) {
         System.out.println(e);
         return new ResponseEntity<>(new IdeaTypeException(e.toString()), HttpStatus.NOT_FOUND);
     }
-    
 
-   
     private static class IdeaTypeException {
+
         private String message;
 
         public IdeaTypeException(String message) {
@@ -37,8 +35,6 @@ public class IdeaRestResponseEntityExceptionHandler extends ResponseEntityExcept
         public IdeaTypeException() {
         }
 
-        
-
         public String getMessage() {
             return message;
         }
@@ -46,6 +42,6 @@ public class IdeaRestResponseEntityExceptionHandler extends ResponseEntityExcept
         public void setMessage(String message) {
             this.message = message;
         }
-        
+
     }
 }

@@ -9,7 +9,7 @@ public class RoleException extends RuntimeException {
 
     @Override
     public String toString() {
-        return getMessage(); //To change body of generated methods, choose Tools | Templates.
+        return getMessage();
     }
-    
+
 }

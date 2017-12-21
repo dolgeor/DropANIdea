@@ -12,17 +12,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 @ControllerAdvice
 public class UserVoteRestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
- 
-    
-    @ExceptionHandler(value = { UserVoteException.class})
+
+    @ExceptionHandler(value = {UserVoteException.class})
     protected ResponseEntity<UserVoteTypeException> handleUserVoteException(UserVoteException e) {
         System.out.println(e);
         return new ResponseEntity<>(new UserVoteTypeException(e.toString()), HttpStatus.NOT_FOUND);
     }
-    
 
-   
     private static class UserVoteTypeException {
+
         private String message;
 
         public UserVoteTypeException(String message) {
@@ -32,8 +30,6 @@ public class UserVoteRestResponseEntityExceptionHandler extends ResponseEntityEx
         public UserVoteTypeException() {
         }
 
-        
-
         public String getMessage() {
             return message;
         }
@@ -41,6 +37,6 @@ public class UserVoteRestResponseEntityExceptionHandler extends ResponseEntityEx
         public void setMessage(String message) {
             this.message = message;
         }
-        
+
     }
 }

@@ -30,8 +30,7 @@ public class RoleRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> createRole(@RequestBody Role role)//, UriComponentsBuilder ucBuilder)
-    {
+    public ResponseEntity<Void> createRole(@RequestBody Role role) {
         roleService.createRole(role);
         return ResponseEntity.ok().build();
     }
@@ -45,19 +44,19 @@ public class RoleRestController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Role> deleteRole(@PathVariable("id") long id) {
         roleService.deleteRole(id);
-       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     @RequestMapping(value = "/{id}/user", method = RequestMethod.POST)
-    public ResponseEntity<Role> addUser(@PathVariable("id") long id , @RequestBody User user) {
+    public ResponseEntity<Role> addUser(@PathVariable("id") long id, @RequestBody User user) {
         roleService.addUser(id, user);
-       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     @RequestMapping(value = "/{id_role}/users/{id_user}", method = RequestMethod.DELETE)
     public ResponseEntity<Role> deleteUser(@PathVariable("id_role") long id, @PathVariable("id_user") long idUser) {
         roleService.deleteUserById(id, idUser);
-       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-  
+
 }

@@ -14,8 +14,8 @@ public class VoteServiceImp implements VoteService {
 
     @Override
     public List<Vote> findVoteByVoteDate(Date date) {
-    System.out.println("Fetching Votes from " + date);
-    List<Vote> votes = (List<Vote>) repo.findByVoteDate(date);
+        System.out.println("Fetching Votes from " + date);
+        List<Vote> votes = (List<Vote>) repo.findByVoteDate(date);
         if (votes.isEmpty()) {
             throw new IdeaException("Nobody voted at " + date);
         }
@@ -32,9 +32,4 @@ public class VoteServiceImp implements VoteService {
         repo.save(vote);
 
     }
-    }
-
-    
-
-   
-
+}

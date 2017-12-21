@@ -10,5 +10,5 @@ public class IdeaException extends RuntimeException {
     public String toString() {
         return getMessage();
     }
-    
+
 }

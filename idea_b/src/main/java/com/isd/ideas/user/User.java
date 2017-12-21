@@ -1,7 +1,6 @@
 package com.isd.ideas.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.isd.ideas.idea.Idea;
 import com.isd.ideas.role.Role;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -12,14 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-    
+
 @Entity
 @Table(name = "user_t",
         uniqueConstraints = {
-            @UniqueConstraint(columnNames = "id"),
+            @UniqueConstraint(columnNames = "id")
+            ,
             @UniqueConstraint(columnNames = "login")
-            
-}
+
+        }
 )
 public class User {
 
@@ -27,16 +27,16 @@ public class User {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private long id;
-    
+
     @Column(name = "login", unique = true, nullable = false)
     private String login;
-    
+
     @Column(name = "password", nullable = false)
     private String password;
-    
+
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
-    
+
     @ManyToOne
     @JsonIgnore
     private Role role;
@@ -44,7 +44,7 @@ public class User {
     public User() {
     }
 
-   public User(User user, Role role) {
+    public User(User user, Role role) {
         this.role = role;
         this.login = user.getLogin();
         this.password = user.getPassword();
@@ -57,7 +57,7 @@ public class User {
         this.password = password;
         this.enabled = enabled;
     }
-    
+
     public Role getRole() {
         return role;
     }
@@ -139,7 +139,5 @@ public class User {
         }
         return true;
     }
-    
-    
-    
+
 }

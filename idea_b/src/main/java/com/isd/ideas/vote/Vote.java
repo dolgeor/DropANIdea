@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
 @Entity
 @Table(name = "vote_t",
         uniqueConstraints = {
@@ -66,10 +65,6 @@ public class Vote {
     public UserVote getUserVote() {
         return userVote;
     }
-
- 
-
-    
 
     @Override
     public String toString() {

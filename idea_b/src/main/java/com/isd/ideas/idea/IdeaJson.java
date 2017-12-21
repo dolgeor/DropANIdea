@@ -11,32 +11,32 @@ import java.sql.Date;
  *
  * @author Ilian
  */
- public class IdeaJson {
+public class IdeaJson {
 
-        private Long id;
-        private String text;
-        private String author;
-        private Date date;
-        private Long likes;
-        private Long dislikes;
+    private Long id;
+    private String text;
+    private String author;
+    private Date date;
+    private Long likes;
+    private Long dislikes;
 
-        public IdeaJson() {
-        }
-        
-        public IdeaJson(long id, String text, String author, Date date, Long likes, Long dislikes) {
-            
-            this.id = id;
-            
-            this.text = text;
-            
-            this.author = author;
-            
-            this.date = date;
-            
-            this.likes = likes;
-            
-            this.dislikes = dislikes;
-        }
+    public IdeaJson() {
+    }
+
+    public IdeaJson(long id, String text, String author, Date date, Long likes, Long dislikes) {
+
+        this.id = id;
+
+        this.text = text;
+
+        this.author = author;
+
+        this.date = date;
+
+        this.likes = likes;
+
+        this.dislikes = dislikes;
+    }
 
     public Long getId() {
         return id;
@@ -86,5 +86,4 @@ import java.sql.Date;
         this.dislikes = dislikes;
     }
 
-      
- }
+}
